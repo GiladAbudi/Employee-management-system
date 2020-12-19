@@ -19,7 +19,7 @@ public class EmployeeController {
     public List<Employee> getAllEmployees(){
          return employeeRepository.findAll();
      }
-     
+
      @PostMapping("/employees")
      public Employee createEmployee (@RequestBody Employee employee){
          return employeeRepository.save(employee);
