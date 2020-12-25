@@ -9,6 +9,7 @@ class ListEmployeesComponent extends Component {
         }
         this.addEmployee= this.addEmployee.bind(this);
         this.updateEmployee= this.updateEmployee.bind(this)
+        this.deleteEmployee= this.deleteEmployee.bind(this)
     }
 
     componentDidMount() {
@@ -24,12 +25,18 @@ class ListEmployeesComponent extends Component {
         this.props.history.push(`/add-employee/${id}`);
     }
 
+    deleteEmployee(id){
+        EmployeeService.deleteEmployee(id).then(res =>{
+            this.setState({employees:this.state.employees.filter(employee=> employee.id!=id)})
+        } );
+    }
+
     render() {
         return (
             <div>
                 <h2 className={"text-center"}> Employees List </h2>
                 <div className={"row"}>
-                    <button className={"btn btn-primary"} onClick={this.addEmployee}>Add Employee</button>
+                    <button className={"btn btn-primary mb-2"} onClick={this.addEmployee}>Add Employee</button>
                 </div>
                 <div className={"row"}>
                     <table className={"table table-striped table-bordered"}>
@@ -52,7 +59,7 @@ class ListEmployeesComponent extends Component {
                                     <td>{employee.email}</td>
                                     <td>
                                         <button className={"btn btn-info"} onClick={() => this.updateEmployee(employee.id)}>Update</button>
-                                        <button className={"btn btn-danger"} onClick={() => ""}>Delete</button>
+                                        <button className={"btn btn-danger ml-2"} onClick={() => this.deleteEmployee(employee.id)}>Delete</button>
                                     </td>
 
                                 </tr>

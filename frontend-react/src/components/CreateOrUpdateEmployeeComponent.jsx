@@ -64,8 +64,8 @@ class CreateOrUpdateEmployeeComponent extends Component {
     render() {
         return (
             <div>
-                <div className={"container"}>
-                    <div className={"row"}>
+                <div className={"container mt-3"}>
+                    <div className={"row "}>
                         <div className={"card col-md-6 offset-md-3 offset-md-3"}>
                             <h3 className={"text-center"}>{this.getTitle()}</h3>
                             <div className={"card-body"}>
@@ -86,7 +86,7 @@ class CreateOrUpdateEmployeeComponent extends Component {
                                                value={this.state.email} onChange={this.changeEmailHandler}/>
                                     </div>
                                     <button className={"btn btn-success"} onClick={this.saveOrUpdateEmployee}>Apply</button>
-                                    <button className={"btn btn-danger"} onClick={this.cancel.bind(this)} style={{marginLeft: "10px"}}>Cancel</button>
+                                    <button className={"btn btn-danger ml-2"} onClick={this.cancel.bind(this)}>Cancel</button>
                                 </form>
                             </div>
                         </div>
