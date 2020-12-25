@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import EmployeeService from "../services/EmployeeService";
 
-class CreateEmployeeComponent extends Component {
+class CreateOrUpdateEmployeeComponent extends Component {
     constructor(props) {
         super(props);
 
         this.state={
+            id: this.props.match.params.id, // get the id param from the rout (from URL path)
             firstName:'',
             lastName:'',
             email:''
@@ -14,7 +15,14 @@ class CreateEmployeeComponent extends Component {
         this.changeFirstNameHandler=this.changeFirstNameHandler.bind(this)
         this.changeLastNameHandler=this.changeLastNameHandler.bind(this)
         this.changeEmailHandler=this.changeEmailHandler.bind(this)
-        this.saveEmployee=this.saveEmployee.bind(this)
+        this.saveOrUpdateEmployee=this.saveOrUpdateEmployee.bind(this)
+    }
+
+    componentDidMount() {
+        EmployeeService.getEmployeeById(this.state.id).then(res=>{
+            let employee = res.data;
+            this.setState({firstName: employee.firstName, lastName:employee.lastName, email:employee.email});
+        })
     }
 
     changeFirstNameHandler(event) {
@@ -29,18 +37,28 @@ class CreateEmployeeComponent extends Component {
     this.setState({email:event.target.value})
     }
 
-    saveEmployee(event){
+    saveOrUpdateEmployee(event){
         event.preventDefault();
         let employee= {firstName:this.state.firstName, lastName:this.state.lastName, email:this.state.email}
         console.log("employee: " + JSON.stringify(employee));
-        EmployeeService.createEmployee(employee).then(res=>{
-            this.props.history.push("/employees");}
-        );
+        if (this.state.id === '_add') {
+            EmployeeService.createEmployee(employee).then(res=>{
+                this.props.history.push("/employees");}
+            );
+        }else{
+            EmployeeService.updateEmployee(this.state.id,employee).then((res)=>{
+                this.props.history.push("/employees");}
+            );
+        }
 
     }
 
     cancel(){
         this.props.history.push("/employees");
+    }
+
+    getTitle(){
+        return this.state.id === '_add' ? "Add Employee" : "Update Employee";
     }
 
     render() {
@@ -49,7 +67,7 @@ class CreateEmployeeComponent extends Component {
                 <div className={"container"}>
                     <div className={"row"}>
                         <div className={"card col-md-6 offset-md-3 offset-md-3"}>
-                            <h3 className={"text-center"}>Add Employee</h3>
+                            <h3 className={"text-center"}>{this.getTitle()}</h3>
                             <div className={"card-body"}>
                                 <form>
                                     <div className={"form-group"}>
@@ -67,7 +85,7 @@ class CreateEmployeeComponent extends Component {
                                         <input className={"form-control"} placeholder={"Email"} name={"Email"}
                                                value={this.state.email} onChange={this.changeEmailHandler}/>
                                     </div>
-                                    <button className={"btn btn-success"} onClick={this.saveEmployee}>Apply</button>
+                                    <button className={"btn btn-success"} onClick={this.saveOrUpdateEmployee}>Apply</button>
                                     <button className={"btn btn-danger"} onClick={this.cancel.bind(this)} style={{marginLeft: "10px"}}>Cancel</button>
                                 </form>
                             </div>
@@ -79,4 +97,4 @@ class CreateEmployeeComponent extends Component {
     }
 }
 
-export default CreateEmployeeComponent;
+export default CreateOrUpdateEmployeeComponent;
