@@ -1,6 +1,8 @@
 package com.gilad.employee_management.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Employee {
@@ -9,8 +11,11 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Size(min=2, message = "The first name must contain at least 2 characters")
     private String firstName;
+    @Size(min=2, message = "The last name must contain at least 2 characters")
     private String lastName;
+    @Email(message = "Email should be valid")
     private String email;
 
     public Employee() {
